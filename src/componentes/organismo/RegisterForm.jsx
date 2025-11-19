@@ -43,6 +43,10 @@ function RegisterForm() {
             setLoading(false);
         }
     };
+      const handleGoogleRegister =()=>{
+        setLoading(true);
+        window.location.href = "http://localhost:4000/auth/google";
+    };
     return (
         <form className="space-y-6 " onSubmit={handleSubmit}>
             <LoginFields
@@ -54,6 +58,13 @@ function RegisterForm() {
             {error && <p className="text-red-600 text-sm">{error}</p>}
             <Button type="submit" disabled={loading} className="mx-auto block">
                 {loading ? 'Cargando...' : 'Registrarse'}
+            </Button>
+            <Button type="submit" 
+                disabled={loading} 
+                className="mx-auto block" 
+                imagen ="https://foroalfa.org/imagenes/ilustraciones/1204.jpg" 
+                tipo="google" onClick={handleGoogleRegister}>
+                    {loading ? 'Cargando...' : 'Iniciar Sesion con google'}
             </Button>
         </form>
     );

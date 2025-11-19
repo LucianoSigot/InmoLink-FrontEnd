@@ -4,9 +4,10 @@ import TemplateRegister from "./componentes/plantillas/TemplateRegister.jsx";
 import Home from "./componentes/organismo/Home.jsx";
 import RutaProtegida from "./componentes/atomos/RutaProtegida.jsx";
 import YaLogeado from "./componentes/atomos/YaLogeado.jsx";
+import GoogleCallback from "./componentes/organismo/GoogleCallback.jsx";
 function App() {
   return (
-    <BrowserRouter>
+      <BrowserRouter>
       <Routes>
 
         <Route path="/login" element={
@@ -14,7 +15,7 @@ function App() {
             }
           />
         <Route path="/register" element={
-          <YaLogeado> <TemplateRegister /></YaLogeado>
+              <TemplateRegister />
             } 
           />
         <Route
@@ -24,6 +25,10 @@ function App() {
               <Home />
             </RutaProtegida>
           }
+        />
+        <Route
+          path="/auth/google/callback"
+          element={<GoogleCallback />}
         />
 
       </Routes>

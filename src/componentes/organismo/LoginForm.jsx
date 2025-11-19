@@ -48,9 +48,12 @@ function LoginForm() {
             setLoading(false);
         }
     };
-
+    const handleGoogleLogin = () => {
+        setLoading(true);
+        window.location.href = "http://localhost:4000/auth/google";
+    };
     return (
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="space-y-6">
             <LoginFields
                 email={form.email}
                 password={form.password}
@@ -58,10 +61,17 @@ function LoginForm() {
             />
             <LinkText text="¿No tienes una cuenta?" linkText="Registrate" to="/register"/>
             {error && <p className="text-red-600 text-sm">{error}</p>}
-            <Button type="submit" disabled={loading} className="mx-auto block">
+            <Button type="submit" disabled={loading} className="mx-auto block" onClick={handleSubmit}>
                 {loading ? 'Cargando...' : 'Iniciar Sesion'}
             </Button>
-        </form>
+            <Button type="submit" 
+                disabled={loading} 
+                className="mx-auto block" 
+                imagen ="https://foroalfa.org/imagenes/ilustraciones/1204.jpg" 
+                tipo="google" onClick={handleGoogleLogin}>
+                    {loading ? 'Cargando...' : 'Iniciar Sesion con google'}
+            </Button>
+        </div>
     );
 }
 
