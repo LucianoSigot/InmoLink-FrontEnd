@@ -28,7 +28,7 @@ export default function DiagnosticPage() {
 
   return (
     <div className="p-8 bg-white rounded-lg shadow">
-      <h1 className="text-2xl font-bold mb-4">Diagnóstico de la Aplicación</h1>
+      <h1 className="text-2xl font-bold mb-4">Diagnostico de la Aplicacion</h1>
       
       <div className="mb-4 p-4 bg-gray-100 rounded">
         <h2 className="font-bold">Estado del Backend:</h2>

@@ -9,7 +9,7 @@ export default function RutaProtegida({ children }) {
       credentials: "include"
     })
       .then(res => {
-        // Si el token expiró o no existe
+        // Si el token expiro o no existe
         if (res.status === 401) {
           setAuth(false);
           return null;
