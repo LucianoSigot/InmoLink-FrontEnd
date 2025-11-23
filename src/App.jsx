@@ -13,6 +13,7 @@ import Alquilo from './pages/Alquilo.jsx'
 import Contacto from './pages/Contacto.jsx'
 import Anuncio from './pages/Anuncio.jsx'
 import EditarPublicacion from './pages/EditarPublicacion.jsx'
+import CrearPublicacion from './pages/CrearPublicacion.jsx';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/anuncio" element={<Anuncio />} />
         <Route path="/anuncio/editar-publicacion" element={<EditarPublicacion />} />
+        <Route path="/publicar" element={<RutaProtegida> <CrearPublicacion /> </RutaProtegida>}/> 
       </Routes>
     </BrowserRouter>
   );
