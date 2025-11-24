@@ -36,16 +36,7 @@ export default function PerfilUsuario() {
 
   const esUsuarioGoogle = userData?.esUsuarioGoogle || false;
 
-  const eliminarFoto = async () => {
-      const respuesta = await deleteFoto();
-      if (respuesta.ok) {
-        setShowEmergente(false);
-        setAccionActual('');
-        setCargando(false);
-        navigate("/perfil");
-        return;
-      }
-  }
+
 
   const manejarAccion = (accion) => {
     setError(null);
@@ -165,7 +156,6 @@ export default function PerfilUsuario() {
 
           <button
             onClick={() => manejarAccion('eliminar')}
-            onClink2={() => eliminarFoto()}
             className="w-full py-3 px-4 bg-white border-2 border-gray-300 rounded-xl font-semibold text-gray-700 hover:bg-red-50 hover:border-red-500 hover:text-red-600 transition-all"
           >
             Eliminar
@@ -225,7 +215,7 @@ export default function PerfilUsuario() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-5xl mx-auto">
 
           {/* Reserva */}
-          <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col h-full relative group"
+          <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col h-full relative group cursor-pointer"
             onClick={() => manejarRuta('reserva')}
             role="button"
             tabIndex={0}>
@@ -236,8 +226,8 @@ export default function PerfilUsuario() {
           </div>
 
           {/* Alquilo */}
-          <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col h-full relative group"
-            onClick={() => manejarRuta('alquilo')}
+          <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col h-full relative group cursor-pointer"
+            onClick={() => manejarRuta('/mis-casas')}
             role="button"
             tabIndex={0}>
             <h3 className="text-xl font-bold text-center mb-4 border-b pb-2 mx-10">Alquilo</h3>
@@ -247,7 +237,7 @@ export default function PerfilUsuario() {
           </div>
         </div>
 
-        {/* SECCIÓN COMENTARIOS */}
+        {/* SECCIÓN COMENTARIOS 
         <div className="max-w-5xl mx-auto">
           <div className="bg-white rounded-2xl shadow-md p-6 relative group">
             <h3 className="text-xl font-bold text-gray-800 mb-4">Comentarios</h3>
@@ -259,6 +249,7 @@ export default function PerfilUsuario() {
             </div>
           </div>
         </div>
+        */}
       </main>
 
       {/* MODAL EMERGENTE */}

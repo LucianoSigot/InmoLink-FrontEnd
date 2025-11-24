@@ -14,6 +14,7 @@ import Contacto from './pages/Contacto.jsx'
 import Anuncio from './pages/Anuncio.jsx'
 import EditarPublicacion from './pages/EditarPublicacion.jsx'
 import CrearPublicacion from './pages/CrearPublicacion.jsx';
+import MisCasas from './pages/misCasas.jsx';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <HomeInmoLink />
           </RutaProtegida>
         } />
+        {/* Rutas de perfil */}
         <Route path="/perfil" element={
           <RutaProtegida>
             <PerfilUsuario />
@@ -59,9 +61,28 @@ function App() {
             <Alquilo />
           </RutaProtegida>
         } />
-        <Route path="/contacto" element={
+        <Route path="/perfil/alquilo/:id" element={
           <RutaProtegida>
-            <Contacto />
+            <Alquilo />
+          </RutaProtegida>
+        } />
+
+        {/* Rutas de propiedades */}
+        <Route path="/reserva" element={
+          <RutaProtegida>
+            <Reserva />
+          </RutaProtegida>
+        } />
+        <Route path="/alquilo" element={
+          <RutaProtegida>
+            <Alquilo />
+          </RutaProtegida>
+        } />
+
+        {/* Rutas de publicaciones */}
+        <Route path="/publicar" element={
+          <RutaProtegida>
+            <CrearPublicacion />
           </RutaProtegida>
         } />
         <Route path="/anuncio" element={
@@ -69,9 +90,26 @@ function App() {
             <Anuncio />
           </RutaProtegida>
         } />
+        <Route path="/anuncio/crear" element={
+          <RutaProtegida>
+            <CrearPublicacion />
+          </RutaProtegida>
+        } />
         <Route path="/anuncio/editar-publicacion" element={
           <RutaProtegida>
             <EditarPublicacion />
+          </RutaProtegida>
+        } />
+        <Route path="/perfil/mis-casas" element={
+          <RutaProtegida>
+            <MisCasas />
+          </RutaProtegida>
+        } />
+
+        {/* Ruta de contacto */}
+        <Route path="/contacto" element={
+          <RutaProtegida>
+            <Contacto />
           </RutaProtegida>
         } />
       </Routes>

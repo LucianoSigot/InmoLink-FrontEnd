@@ -12,23 +12,13 @@ const CrearPublicacion = () => {
     setLoading(true);
     setError('');
 
-    //para el token
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      setError("No estás autenticado. Por favor inicia sesión nuevamente.");
-      setLoading(false);
-      return;
-    }
-
     try {
       const response = await fetch("http://localhost:4000/properties", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Content-Type": "application/json"
         },
-
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
@@ -38,7 +28,6 @@ const CrearPublicacion = () => {
         throw new Error(data.msg || 'Error al crear la publicación');
       }
 
-      //creacion exitosa
       navigate('/perfil/alquilo');
 
     } catch (err) {
