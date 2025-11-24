@@ -16,31 +16,63 @@ import EditarPublicacion from './pages/EditarPublicacion.jsx'
 
 function App() {
   return (
-      <BrowserRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/login" element={
-           <TemplateLogin />
-            }
-          />
+          <TemplateLogin />
+        }
+        />
         <Route path="/register" element={
-              <TemplateRegister />
-            } 
-          />
+          <TemplateRegister />
+        }
+        />
         <Route
           path="/auth/google/callback"
           element={<GoogleCallback />}
         />
         <Route
-          path="*" element={<NoFoundPage/>}
-          />
-        <Route path="/" element={<HomeInmoLink/>} />
-        <Route path="/perfil" element={<PerfilUsuario/>}/>
-        <Route path="/perfil/editar" element={<EditarUsuario />} />
-        <Route path="/perfil/reserva" element={<Reserva />} />
-        <Route path="/perfil/alquilo" element={<Alquilo />} />
-        <Route path="/contacto" element={<Contacto />} />
-        <Route path="/anuncio" element={<Anuncio />} />
-        <Route path="/anuncio/editar-publicacion" element={<EditarPublicacion />} />
+          path="*" element={<NoFoundPage />}
+        />
+        <Route path="/" element={
+          <RutaProtegida>
+            <HomeInmoLink />
+          </RutaProtegida>
+        } />
+        <Route path="/perfil" element={
+          <RutaProtegida>
+            <PerfilUsuario />
+          </RutaProtegida>
+        } />
+        <Route path="/perfil/editar" element={
+          <RutaProtegida>
+            <EditarUsuario />
+          </RutaProtegida>
+        } />
+        <Route path="/perfil/reserva" element={
+          <RutaProtegida>
+            <Reserva />
+          </RutaProtegida>
+        } />
+        <Route path="/perfil/alquilo" element={
+          <RutaProtegida>
+            <Alquilo />
+          </RutaProtegida>
+        } />
+        <Route path="/contacto" element={
+          <RutaProtegida>
+            <Contacto />
+          </RutaProtegida>
+        } />
+        <Route path="/anuncio" element={
+          <RutaProtegida>
+            <Anuncio />
+          </RutaProtegida>
+        } />
+        <Route path="/anuncio/editar-publicacion" element={
+          <RutaProtegida>
+            <EditarPublicacion />
+          </RutaProtegida>
+        } />
       </Routes>
     </BrowserRouter>
   );

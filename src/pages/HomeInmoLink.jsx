@@ -15,6 +15,7 @@ const mockPropiedades = [
 const HomeInmoLink = () => {
   const navigate = useNavigate();
   
+
   // Función para ir al detalle
   const manejarRuta = (id) => {
     // Podrías usar el ID aquí: navigate(`/anuncio/${id}`);

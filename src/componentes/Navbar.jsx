@@ -8,6 +8,7 @@ function Navbar({children}) {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+ 
 
   return (
     <nav className='bg-slate-200 shadow-md w-full relative z-50'>

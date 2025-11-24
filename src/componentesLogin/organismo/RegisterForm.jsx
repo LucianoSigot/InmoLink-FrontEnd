@@ -3,6 +3,7 @@ import Button from "../atomos/Button";
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { LinkText } from "../atomos/LinkText";
+
 function RegisterForm() {
     const [form, setForm] = useState({
         email: '',
@@ -27,11 +28,12 @@ function RegisterForm() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify(form)
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
                 setError(data.msg || 'Error al registrarse');
                 return;
@@ -43,10 +45,12 @@ function RegisterForm() {
             setLoading(false);
         }
     };
-      const handleGoogleRegister =()=>{
+
+    const handleGoogleRegister = () => {
         setLoading(true);
         window.location.href = "http://localhost:4000/auth/google";
     };
+
     return (
         <form className="space-y-6 " onSubmit={handleSubmit}>
             <LoginFields
@@ -54,17 +58,17 @@ function RegisterForm() {
                 password={form.password}
                 onChange={handleChange}
             />
-            <LinkText text="¿Ya tienes cuenta?" linkText="Logeate" to="/login"/>
+            <LinkText text="¿Ya tienes cuenta?" linkText="Logeate" to="/login" />
             {error && <p className="text-red-600 text-sm">{error}</p>}
             <Button type="submit" disabled={loading} className="mx-auto block">
                 {loading ? 'Cargando...' : 'Registrarse'}
             </Button>
-            <Button type="submit" 
-                disabled={loading} 
-                className="mx-auto block" 
-                imagen ="https://foroalfa.org/imagenes/ilustraciones/1204.jpg" 
+            <Button type="submit"
+                disabled={loading}
+                className="mx-auto block"
+                imagen="https://foroalfa.org/imagenes/ilustraciones/1204.jpg"
                 tipo="google" onClick={handleGoogleRegister}>
-                    {loading ? 'Cargando...' : 'Iniciar Sesion con google'}
+                {loading ? 'Cargando...' : 'Iniciar Sesion con google'}
             </Button>
         </form>
     );
