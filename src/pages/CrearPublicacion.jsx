@@ -16,9 +16,9 @@ const CrearPublicacion = () => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-        setError("No estás autenticado. Por favor inicia sesión nuevamente.");
-        setLoading(false);
-        return;
+      setError("No estás autenticado. Por favor inicia sesión nuevamente.");
+      setLoading(false);
+      return;
     }
 
     try {
@@ -26,9 +26,9 @@ const CrearPublicacion = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` 
+          "Authorization": `Bearer ${token}`
         },
-        
+
         body: JSON.stringify(formData),
       });
 
@@ -39,7 +39,7 @@ const CrearPublicacion = () => {
       }
 
       //creacion exitosa
-      navigate('/perfil/alquilo'); 
+      navigate('/perfil/alquilo');
 
     } catch (err) {
       console.error(err);
@@ -53,11 +53,11 @@ const CrearPublicacion = () => {
     <div className="min-h-screen bg-gray-100">
       <Navbar />
       <div className="container mx-auto p-4 md:p-8">
-        
+
         {/* boton volver */}
         <div className="flex items-center mb-6">
-          <button 
-            onClick={() => navigate(-1)} 
+          <button
+            onClick={() => navigate(-1)}
             className="p-2 bg-white rounded-full shadow-sm text-gray-600 hover:bg-gray-200 transition"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,8 +69,8 @@ const CrearPublicacion = () => {
 
         {/* tarjeta del Formulario */}
         <div className="bg-white w-full max-w-4xl mx-auto rounded-3xl shadow-xl overflow-hidden p-6 md:p-10">
-          
-          {error && ( 
+
+          {error && (
             <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r shadow-sm">
               <p className="font-bold">Error</p>
               <p>{error}</p>
