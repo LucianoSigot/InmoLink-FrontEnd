@@ -39,9 +39,11 @@ function LoginForm() {
                 return;
             }
 
-            if (response.ok) {
+            if (response.ok) { 
+                localStorage.setItem('token', data.token); //guarda el token el el localstorage (cookie)
             navigate("/");
             }
+
         } catch (err) {
             setError('Error de conexión: ' + err.message);
         } finally {
