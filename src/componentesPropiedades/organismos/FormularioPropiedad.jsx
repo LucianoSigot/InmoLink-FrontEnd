@@ -4,13 +4,16 @@ import { supabase } from '../../supabase/client';
 import DatosPrincipales from '../moleculas/DatosPrincipales';
 import SelectorServicios from '../moleculas/SelectorServicios';
 import GaleriaFotos from '../moleculas/GaleriaFotos';
+import Mapa from '../moleculas/Mapa';
 
 const FormularioPropiedad = ({ onSubmit, loading }) => {
   const [formData, setFormData] = useState({
     titulo: '',
     descripcion: '',
     ubicacion: '',
+    coordenadas: { lat: 0, lng: 0 },
     precio: '',
+    tamanio: 1,
     habitaciones: 1,
     servicios: {
       basicos: { wifi: false, agua_caliente: false, aire_acondicionado: false, calefaccion: false, articulos_higiene: false },
@@ -90,6 +93,13 @@ const FormularioPropiedad = ({ onSubmit, loading }) => {
     onSubmit(formData);
   };
 
+  const handleLocationChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      coordenadas: { lat: e.latlng.lat, lng: e.latlng.lng }
+    }));
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
 
@@ -106,6 +116,11 @@ const FormularioPropiedad = ({ onSubmit, loading }) => {
       />
 
       <hr className="border-gray-200" />
+
+      <Mapa
+        coordenadas={formData.coordenadas}
+        handleLocationChange={handleLocationChange}
+      />
 
       <GaleriaFotos
         fotos={formData.fotos}
@@ -125,4 +140,4 @@ const FormularioPropiedad = ({ onSubmit, loading }) => {
   );
 };
 
-export default FormularioPropiedad;
+export default FormularioPropiedad; 

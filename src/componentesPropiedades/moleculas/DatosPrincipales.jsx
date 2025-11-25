@@ -50,6 +50,17 @@ const DatosPrincipales = ({ formData, handleChange }) => {
                             onChange={handleChange}
                         />
                     </div>
+                    <div>
+                        <Label>Tamaño (m<sup>2</sup>)</Label>
+                        <Input
+                            type="number"
+                            name="tamanio"
+                            required
+                            min="1"
+                            value={formData.tamanio}
+                            onChange={handleChange}
+                        />
+                    </div>
                 </div>
             </div>
             <div className="space-y-4">

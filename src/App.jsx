@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import 'leaflet/dist/leaflet.css';
 import TemplateLogin from "./componentesLogin/plantillas/TemplateLogin.jsx";
 import TemplateRegister from "./componentesLogin/plantillas/TemplateRegister.jsx";
 import RutaProtegida from "./componentesLogin/atomos/RutaProtegida.jsx";
