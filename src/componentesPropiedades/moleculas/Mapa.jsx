@@ -12,12 +12,17 @@ const ClickHandler = ({ position, setPosition, handleLocationChange }) => {
     return position ? <Marker position={position} /> : null
 }
 
-const Mapa = ({ handleLocationChange }) => {
-    const [position, setPosition] = useState([-33.666667, -65.466667])
+const Mapa = ({ handleLocationChange, coordenadas }) => {
+    const defaultPosition = [-33.666667, -65.466667];
+    const initialPosition = coordenadas && coordenadas.lat && coordenadas.lng
+        ? [coordenadas.lat, coordenadas.lng]
+        : defaultPosition;
+
+    const [position, setPosition] = useState(initialPosition)
     return (
         <div>
             <SectionTitle>Ubicación</SectionTitle>
-            <MapContainer className="h-64 w-full" center={[-33.666667, -65.466667]} zoom={13}>
+            <MapContainer className="h-64 w-full" center={initialPosition} zoom={13}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

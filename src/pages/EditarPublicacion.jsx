@@ -5,6 +5,7 @@ import { obtenerPropiedad, editarPropiedades } from '../servicios/propiedad.serv
 import SelectorServicios from '../componentesPropiedades/moleculas/SelectorServicios'
 import GaleriaFotos from '../componentesPropiedades/moleculas/GaleriaFotos'
 import { supabase } from '../supabase/client'
+import Mapa from '../componentesPropiedades/moleculas/Mapa'
 
 const EditarPublicacion = () => {
   const navigate = useNavigate();
@@ -94,6 +95,13 @@ const EditarPublicacion = () => {
     setPropiedad((prev) => ({
       ...prev,
       fotos: prev.fotos.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleLocationChange = (e) => {
+    setPropiedad((prev) => ({
+      ...prev,
+      coordenadas: { lat: e.latlng.lat, lng: e.latlng.lng }
     }));
   };
 
@@ -255,11 +263,20 @@ const EditarPublicacion = () => {
 
             <hr className="border-gray-200" />
 
+
             {/* 3. SERVICIOS */}
             {propiedad.servicios && (
               <SelectorServicios
                 servicios={propiedad.servicios}
                 handleServiceChange={handleServiceChange}
+              />
+            )}
+
+            {/* mapa */}
+            {propiedad.coordenadas && (
+              <Mapa
+                coordenadas={propiedad.coordenadas}
+                handleLocationChange={handleLocationChange}
               />
             )}
 
