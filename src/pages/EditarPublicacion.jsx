@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from '../componentes/Navbar'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { obtenerPropiedad, editarPropiedades } from '../servicios/propiedad.service'
+import { obtenerPropiedad, editarPropiedades, eliminarPropiedad, eliminarFoto } from '../servicios/propiedad.service'
 import SelectorServicios from '../componentesPropiedades/moleculas/SelectorServicios'
 import GaleriaFotos from '../componentesPropiedades/moleculas/GaleriaFotos'
 import { supabase } from '../supabase/client'
@@ -16,6 +16,10 @@ const EditarPublicacion = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [step, setStep] = useState(1);
+  const [password, setPassword] = useState("");
+
 
   useEffect(() => {
     const cargarPropiedad = async () => {
@@ -91,7 +95,10 @@ const EditarPublicacion = () => {
     }
   };
 
-  const handleRemoveFoto = (index) => {
+  const handleRemoveFoto = async (index) => {
+    const pathFoto = propiedad.fotos[index];
+    await eliminarFoto(pathFoto);
+
     setPropiedad((prev) => ({
       ...prev,
       fotos: prev.fotos.filter((_, i) => i !== index)
@@ -118,6 +125,26 @@ const EditarPublicacion = () => {
       setLoading(false);
     }
   };
+
+  const handleBorrarPropiedad = async () => {
+    try {
+
+      if (propiedad.fotos && propiedad.fotos.length > 0) {
+        await eliminarFoto(propiedad.fotos);
+      }
+
+      await eliminarPropiedad(propiedadId, { password });
+
+      navigate('/perfil/mis-casas');
+    } catch (error) {
+      console.error("Error al borrar propiedad:", error);
+      setError(error.message);
+    }
+  }
+
+
+
+
 
   if (loading) {
     return (
@@ -221,7 +248,7 @@ const EditarPublicacion = () => {
 
                 {/* Ubicación */}
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Ubicación</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Dirección</label>
                   <input
                     type="text"
                     name="ubicacion"
@@ -238,6 +265,19 @@ const EditarPublicacion = () => {
                     type="number"
                     name="habitaciones"
                     value={propiedad.habitaciones || 1}
+                    onChange={handleChange}
+                    min="1"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                  />
+                </div>
+
+                {/*tamanio */}
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Tamaño (m2)</label>
+                  <input
+                    type="number"
+                    name="tamanio"
+                    value={propiedad.tamanio || 1}
                     onChange={handleChange}
                     min="1"
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
@@ -291,6 +331,89 @@ const EditarPublicacion = () => {
               >
                 Cancelar
               </button>
+
+              {/* Boton de borrar */}
+              <button
+                type="button"
+                onClick={() => setShowModal(true)}
+                className="w-full md:w-1/3 py-4 px-6 rounded-2xl border-2 border-red-600 text-red-700 font-bold hover:bg-red -50 transition-colors flex items-center justify-center gap-2"
+              >
+                Borrar publicacion
+              </button>
+
+              {/* modal */}
+              {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-[9999] bg-black/50 backdrop-blur-sm">
+                  <div className="bg-white p-6 rounded-2xl shadow-xl w-80">
+
+                    {step === 1 && (
+                      <>
+                        <h2 className="text-lg font-bold mb-4 text-center">
+                          ¿Desea eliminar la publicacion?
+                        </h2>
+                        <p className="text-sm text-gray-600 mb-6 text-center">
+                          Esta acción no se puede deshacer.
+                        </p>
+
+                        <div className="flex justify-between gap-3">
+                          <button
+                            onClick={() => setShowModal(false)}
+                            className="w-1/2 py-2 bg-gray-200 rounded-xl"
+                          >
+                            No
+                          </button>
+
+                          <button
+                            onClick={() => setStep(2)}
+                            className="w-1/2 py-2 bg-red-600 text-white rounded-xl"
+                          >
+                            Sí
+                          </button>
+                        </div>
+                      </>
+                    )}
+
+                    {step === 2 && (
+                      <>
+                        <h2 className="text-lg font-bold mb-4 text-center">
+                          Confirmar eliminación
+                        </h2>
+                        <p className="text-sm text-gray-600 mb-3 text-center">
+                          Ingresá tu contraseña para continuar.
+                        </p>
+
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full border rounded-xl p-2 mb-3"
+                        />
+
+                        {error && (
+                          <p className="text-red-600 text-sm mb-2">{error}</p>
+                        )}
+
+                        <div className="flex justify-between gap-3">
+                          <button
+                            onClick={() => setShowModal(false)}
+                            className="w-1/2 py-2 bg-gray-200 rounded-xl"
+                          >
+                            Cancelar
+                          </button>
+
+                          <button
+                            onClick={handleBorrarPropiedad}
+
+                            className="w-1/2 py-2 bg-red-600 text-white rounded-xl"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Guardar */}
               <button

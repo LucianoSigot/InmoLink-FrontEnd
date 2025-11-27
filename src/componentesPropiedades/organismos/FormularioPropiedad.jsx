@@ -5,6 +5,7 @@ import DatosPrincipales from '../moleculas/DatosPrincipales';
 import SelectorServicios from '../moleculas/SelectorServicios';
 import GaleriaFotos from '../moleculas/GaleriaFotos';
 import Mapa from '../moleculas/Mapa';
+import { eliminarFoto } from '../../servicios/propiedad.service';
 
 const FormularioPropiedad = ({ onSubmit, loading }) => {
   const [formData, setFormData] = useState({
@@ -81,7 +82,10 @@ const FormularioPropiedad = ({ onSubmit, loading }) => {
     }
   };
 
-  const handleRemoveFoto = (index) => {
+  const handleRemoveFoto = async (index) => {
+    const pathFoto = formData.fotos[index];
+    await eliminarFoto(pathFoto);
+
     setFormData((prev) => ({
       ...prev,
       fotos: prev.fotos.filter((_, i) => i !== index)
@@ -140,4 +144,4 @@ const FormularioPropiedad = ({ onSubmit, loading }) => {
   );
 };
 
-export default FormularioPropiedad; 
+export default FormularioPropiedad;

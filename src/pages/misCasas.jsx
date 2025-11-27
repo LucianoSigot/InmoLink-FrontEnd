@@ -58,7 +58,7 @@ export const misCasas = () => {
                     <div className="text-center py-12 bg-white rounded-lg shadow">
                         <p className="text-gray-500 text-lg">No tienes propiedades publicadas aún.</p>
                         <button
-                            onClick={() => navigate('/crear-publicacion')}
+                            onClick={() => navigate('/publicar')}
                             className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                         >
                             Publicar mi primera propiedad
