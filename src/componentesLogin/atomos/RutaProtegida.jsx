@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-export default function RutaProtegida({ children }) {
+export default function RutaProtegida({ children, adminOnly = false }) {
   const [auth, setAuth] = useState(null);
+  const [user, setUser] = useState(null);
   const location = useLocation();
   useEffect(() => {
     fetch("http://localhost:4000/api/checkOut", {
@@ -17,7 +18,10 @@ export default function RutaProtegida({ children }) {
         return res.json();
       })
       .then(data => {
-        if (data) setAuth(data.auth);
+        if (data) {
+          setAuth(data.auth);
+          setUser(data.user);
+        }
       })
       .catch(() => setAuth(false));
   }, [location.pathname]);
@@ -26,5 +30,11 @@ export default function RutaProtegida({ children }) {
     return <p>Cargando...</p>;
   }
 
-  return auth ? children : <Navigate to="/login" replace />;
+  if (!auth) return <Navigate to="/login" replace />;
+
+  if (adminOnly && user?.rol !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
 }

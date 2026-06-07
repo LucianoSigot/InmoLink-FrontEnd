@@ -7,6 +7,7 @@ function Navbar({ children, styles, showBackButton }) {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [fotoPerfil, setFotoPerfil] = useState(null);
+  const [userRol, setUserRol] = useState(null);
 
   useEffect(() => {
     const cargarDatosUsuario = async () => {
@@ -14,6 +15,9 @@ function Navbar({ children, styles, showBackButton }) {
         const data = await getUserProfile();
         if (data && data.foto) {
           setFotoPerfil(data.foto);
+        }
+        if (data && data.rol) {
+          setUserRol(data.rol);
         }
       } catch (error) {
         console.error("Error al cargar la foto de perfil en el Navbar", error);
@@ -66,6 +70,9 @@ function Navbar({ children, styles, showBackButton }) {
               <Link to="/" className='text-gray-500 hover:text-black font-medium transition-colors text-sm uppercase tracking-widest'>Home</Link>
               <Link to="/perfil/reserva" className='text-gray-500 hover:text-black font-medium transition-colors text-sm uppercase tracking-widest'>Mis Reservas</Link>
               <Link to="/contacto" className="text-gray-500 hover:text-black font-medium transition-colors text-sm uppercase tracking-widest">Contacto</Link>
+              {userRol === "admin" && (
+                <Link to="/admin" className="text-red-600 hover:text-red-700 font-medium transition-colors text-sm uppercase tracking-widest">Admin</Link>
+              )}
             </div>
           </div>
 
@@ -123,6 +130,9 @@ function Navbar({ children, styles, showBackButton }) {
               <Link to="/" onClick={closeMenu} className="text-3xl font-['Cormorant_Garamond'] text-gray-900 border-b border-gray-50 pb-2">Home</Link>
               <Link to="/perfil/reserva" onClick={closeMenu} className="text-3xl font-['Cormorant_Garamond'] text-gray-900 border-b border-gray-50 pb-2">Mis Reservas</Link>
               <Link to="/contacto" onClick={closeMenu} className="text-3xl font-['Cormorant_Garamond'] text-gray-900 border-b border-gray-50 pb-2">Contacto</Link>
+              {userRol === "admin" && (
+                <Link to="/admin" onClick={closeMenu} className="text-3xl font-['Cormorant_Garamond'] text-red-600 border-b border-gray-50 pb-2">Admin</Link>
+              )}
               <Link to="/publicar" onClick={closeMenu} className="text-3xl font-['Cormorant_Garamond'] text-amber-600 border-b border-gray-50 pb-2">+ Publicar</Link>
             </nav>
 

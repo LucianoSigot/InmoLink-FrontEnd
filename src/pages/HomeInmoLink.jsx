@@ -7,13 +7,13 @@ const HomeInmoLink = () => {
   const navigate = useNavigate();
   const [propiedades, setPropiedades] = useState([]);
   const [loading, setLoading] = useState(false);
-  
+
   // Estados para paginación
   const [paginaActual, setPaginaActual] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
-  
+
   const [filtros, setFiltros] = useState({
-    busqueda: '', 
+    busqueda: '',
     precio: { min: '', max: '' },
     metrosCuadrados: { min: '', max: '' },
     habitaciones: '',
@@ -21,8 +21,16 @@ const HomeInmoLink = () => {
     ordenPrecio: 'asc'
   });
 
-  const handleChange = (e) => setFiltros({ ...filtros, [e.target.name]: e.target.value });
-  const handleNestedChange = (e, categoria, campo) => setFiltros({ ...filtros, [categoria]: { ...filtros[categoria], [campo]: e.target.value } });
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+    const sanitized = (type === 'number' && value !== '' && Number(value) < 0) ? '0' : value;
+    setFiltros({ ...filtros, [name]: sanitized });
+  };
+  const handleNestedChange = (e, categoria, campo) => {
+    const { value, type } = e.target;
+    const sanitized = type === 'number' && value !== '' && Number(value) < 0 ? '0' : value;
+    setFiltros({ ...filtros, [categoria]: { ...filtros[categoria], [campo]: sanitized } });
+  };
   const handleKeyDown = (e) => { if (e.key === 'Enter') aplicarFiltros(1); };
 
   const aplicarFiltros = async (pagina = 1) => {
@@ -96,81 +104,81 @@ const HomeInmoLink = () => {
   };
 
   return (
-    <div className='min-h-screen bg-[#fdfcfb] font-sans'> 
+    <div className='min-h-screen bg-[#fdfcfb] font-sans'>
       <Navbar>
         <div className="flex w-full max-w-xl mx-auto group">
-            <input type="text" name="busqueda" value={filtros.busqueda} onChange={handleChange} onKeyDown={handleKeyDown} className="w-full py-2.5 px-6 border-y border-l border-gray-200 rounded-l-full focus:outline-none focus:ring-1 focus:ring-black/5 bg-white/50 backdrop-blur-sm transition-all" placeholder="Buscar residencias, villas..." />
-            <button type="button" onClick={() => aplicarFiltros(1)} className="px-8 py-2.5 text-white bg-black rounded-r-full hover:bg-gray-800 transition-all font-semibold text-xs uppercase tracking-widest">
-              Buscar
-            </button>
+          <input type="text" name="busqueda" value={filtros.busqueda} onChange={handleChange} onKeyDown={handleKeyDown} className="w-full py-2.5 px-6 border-y border-l border-gray-200 rounded-l-full focus:outline-none focus:ring-1 focus:ring-black/5 bg-white/50 backdrop-blur-sm transition-all" placeholder="Buscar residencias, villas..." />
+          <button type="button" onClick={() => aplicarFiltros(1)} className="px-8 py-2.5 text-white bg-black rounded-r-full hover:bg-gray-800 transition-all font-semibold text-xs uppercase tracking-widest">
+            Buscar
+          </button>
         </div>
       </Navbar>
 
       <div className="container mx-auto p-6 md:p-12">
         <header className="mb-12 text-center md:text-left">
-            <h1 className="text-5xl md:text-6xl font-['Cormorant_Garamond'] text-gray-900 mb-4">Residencias Exclusivas</h1>
-            <p className="text-gray-500 font-light tracking-widest uppercase text-xs">Encuentra tu próximo hogar con nosotros</p>
+          <h1 className="text-5xl md:text-6xl font-['Cormorant_Garamond'] text-gray-900 mb-4">Residencias Exclusivas</h1>
+          <p className="text-gray-500 font-light tracking-widest uppercase text-xs">Encuentra tu próximo hogar con nosotros</p>
         </header>
-        
+
         <div className="flex flex-col lg:flex-row gap-12">
           {/* BARRA LATERAL (Filtros) */}
           <aside className="w-full lg:w-1/4 lg:min-w-[300px]">
-             <div className="sticky top-28 bg-white p-8 rounded-3xl luxury-shadow border border-gray-50">
-                <h3 className="font-['Cormorant_Garamond'] text-2xl text-gray-900 mb-8 border-b border-gray-100 pb-4">
-                  Refinar Búsqueda
-                </h3>
-                
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Dormitorios</label>
-                    <input type="number" name="habitaciones" value={filtros.habitaciones} onChange={handleChange} className="w-full border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Ej: 3" />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Rango de Precio</label>
-                    <div className="flex gap-4">
-                      <input type="number" value={filtros.precio.min} onChange={(e) => handleNestedChange(e, 'precio', 'min')} className="w-1/2 border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Mín" />
-                      <input type="number" value={filtros.precio.max} onChange={(e) => handleNestedChange(e, 'precio', 'max')} className="w-1/2 border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Máx" />
-                    </div>
-                  </div>
+            <div className="sticky top-28 bg-white p-8 rounded-3xl luxury-shadow border border-gray-50">
+              <h3 className="font-['Cormorant_Garamond'] text-2xl text-gray-900 mb-8 border-b border-gray-100 pb-4">
+                Refinar Búsqueda
+              </h3>
 
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Superficie (m²)</label>
-                    <div className="flex gap-4">
-                      <input type="number" value={filtros.metrosCuadrados.min} onChange={(e) => handleNestedChange(e, 'metrosCuadrados', 'min')} className="w-1/2 border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Mín" />
-                      <input type="number" value={filtros.metrosCuadrados.max} onChange={(e) => handleNestedChange(e, 'metrosCuadrados', 'max')} className="w-1/2 border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Máx" />
-                    </div>
-                  </div>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Dormitorios</label>
+                  <input type="number" min="0" name="habitaciones" value={filtros.habitaciones} onChange={handleChange} onKeyDown={(e) => e.key === '-' && e.preventDefault()} className="w-full border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Ej: 3" />
+                </div>
 
-                  <div>
-                     <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Ordenamiento</label>
-                     <select name="ordenPrecio" value={filtros.ordenPrecio} onChange={handleChange} className="w-full border-gray-100 border-b p-2 bg-transparent focus:border-black outline-none cursor-pointer text-sm">
-                       <option value="asc">Menor Precio</option>
-                       <option value="desc">Mayor Precio</option>
-                     </select>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Rango de Precio</label>
+                  <div className="flex gap-4">
+                    <input type="number" min="0" value={filtros.precio.min} onChange={(e) => handleNestedChange(e, 'precio', 'min')} onKeyDown={(e) => e.key === '-' && e.preventDefault()} className="w-1/2 border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Mín" />
+                    <input type="number" min="0" value={filtros.precio.max} onChange={(e) => handleNestedChange(e, 'precio', 'max')} onKeyDown={(e) => e.key === '-' && e.preventDefault()} className="w-1/2 border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Máx" />
                   </div>
                 </div>
 
-                <button onClick={() => aplicarFiltros(1)} className="w-full mt-10 bg-black text-white font-bold text-[10px] uppercase tracking-[0.2em] py-4 rounded-full hover:bg-gray-800 transition-all active:scale-[0.98] luxury-shadow">
-                  {loading ? 'Filtrando...' : 'Aplicar Selección'}
-                </button>
-             </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Superficie (m²)</label>
+                  <div className="flex gap-4">
+                    <input type="number" min="0" value={filtros.metrosCuadrados.min} onChange={(e) => handleNestedChange(e, 'metrosCuadrados', 'min')} onKeyDown={(e) => e.key === '-' && e.preventDefault()} className="w-1/2 border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Mín" />
+                    <input type="number" min="0" value={filtros.metrosCuadrados.max} onChange={(e) => handleNestedChange(e, 'metrosCuadrados', 'max')} onKeyDown={(e) => e.key === '-' && e.preventDefault()} className="w-1/2 border-gray-100 border-b p-2 focus:border-black outline-none transition-all text-sm bg-transparent" placeholder="Máx" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Ordenamiento</label>
+                  <select name="ordenPrecio" value={filtros.ordenPrecio} onChange={handleChange} className="w-full border-gray-100 border-b p-2 bg-transparent focus:border-black outline-none cursor-pointer text-sm">
+                    <option value="asc">Menor Precio</option>
+                    <option value="desc">Mayor Precio</option>
+                  </select>
+                </div>
+              </div>
+
+              <button onClick={() => aplicarFiltros(1)} className="w-full mt-10 bg-black text-white font-bold text-[10px] uppercase tracking-[0.2em] py-4 rounded-full hover:bg-gray-800 transition-all active:scale-[0.98] luxury-shadow">
+                {loading ? 'Filtrando...' : 'Aplicar Selección'}
+              </button>
+            </div>
           </aside>
 
           {/* CONTENIDO PRINCIPAL */}
           <main className="w-full lg:w-3/4">
             <div className="flex justify-between items-center mb-10 pb-4 border-b border-gray-100">
-               <span className="text-gray-400 text-xs font-light tracking-widest uppercase">
-                 <span className="text-gray-900 font-bold">{propiedades.length}</span> Propiedades encontradas
-               </span>
-               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest bg-gray-50 px-4 py-1.5 rounded-full border border-gray-100">
-                 Página {paginaActual} / {totalPaginas}
-               </span>
+              <span className="text-gray-400 text-xs font-light tracking-widest uppercase">
+                <span className="text-gray-900 font-bold">{propiedades.length}</span> Propiedades encontradas
+              </span>
+              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest bg-gray-50 px-4 py-1.5 rounded-full border border-gray-100">
+                Página {paginaActual} / {totalPaginas}
+              </span>
             </div>
 
             {loading ? (
               <div className="flex justify-center items-center py-20">
-                 <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
               </div>
             ) : propiedades.length > 0 ? (
               <>
@@ -184,16 +192,15 @@ const HomeInmoLink = () => {
 
                 {/* --- PAGINACIÓN ESTÉTICA --- */}
                 <div className="flex justify-center items-center mt-12 gap-2 select-none">
-                  
+
                   {/* Botón Anterior */}
-                  <button 
-                    onClick={() => cambiarPagina(paginaActual - 1)} 
+                  <button
+                    onClick={() => cambiarPagina(paginaActual - 1)}
                     disabled={paginaActual === 1}
-                    className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${
-                      paginaActual === 1 
-                        ? 'text-gray-300 cursor-not-allowed bg-transparent' 
-                        : 'text-gray-600 hover:bg-white hover:text-blue-600 hover:shadow-md border border-transparent hover:border-gray-200 bg-white shadow-sm'
-                    }`}
+                    className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${paginaActual === 1
+                      ? 'text-gray-300 cursor-not-allowed bg-transparent'
+                      : 'text-gray-600 hover:bg-white hover:text-blue-600 hover:shadow-md border border-transparent hover:border-gray-200 bg-white shadow-sm'
+                      }`}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                   </button>
@@ -207,11 +214,10 @@ const HomeInmoLink = () => {
                         <button
                           key={index}
                           onClick={() => cambiarPagina(num)}
-                          className={`h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold transition-all duration-200 ${
-                            paginaActual === num 
-                              ? 'bg-white text-blue-600 shadow-md scale-105' 
-                              : 'text-gray-500 hover:bg-gray-200 hover:text-gray-800'
-                          }`}
+                          className={`h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold transition-all duration-200 ${paginaActual === num
+                            ? 'bg-white text-blue-600 shadow-md scale-105'
+                            : 'text-gray-500 hover:bg-gray-200 hover:text-gray-800'
+                            }`}
                         >
                           {num}
                         </button>
@@ -220,14 +226,13 @@ const HomeInmoLink = () => {
                   </div>
 
                   {/* Botón Siguiente */}
-                  <button 
-                    onClick={() => cambiarPagina(paginaActual + 1)} 
+                  <button
+                    onClick={() => cambiarPagina(paginaActual + 1)}
                     disabled={paginaActual === totalPaginas}
-                    className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${
-                      paginaActual === totalPaginas 
-                        ? 'text-gray-300 cursor-not-allowed bg-transparent' 
-                        : 'text-gray-600 hover:bg-white hover:text-blue-600 hover:shadow-md border border-transparent hover:border-gray-200 bg-white shadow-sm'
-                    }`}
+                    className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${paginaActual === totalPaginas
+                      ? 'text-gray-300 cursor-not-allowed bg-transparent'
+                      : 'text-gray-600 hover:bg-white hover:text-blue-600 hover:shadow-md border border-transparent hover:border-gray-200 bg-white shadow-sm'
+                      }`}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                   </button>

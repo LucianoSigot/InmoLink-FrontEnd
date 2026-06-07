@@ -15,6 +15,11 @@ import Contacto from './pages/Contacto.jsx'
 import EditarPublicacion from './pages/EditarPublicacion.jsx'
 import CrearPublicacion from './pages/CrearPublicacion.jsx';
 import MisCasas from './pages/MisCasas.jsx';
+import AdminLayout from './componentesAdmin/AdminLayout.jsx';
+import AdminDashboard from './pages/admin/AdminDashboard.jsx';
+import AdminProperties from './pages/admin/AdminProperties.jsx';
+import AdminUsers from './pages/admin/AdminUsers.jsx';
+import AdminUserDetail from './pages/admin/AdminUserDetail.jsx';
 
 function App() {
   return (
@@ -48,6 +53,12 @@ function App() {
         <Route path="/perfil/mis-casas" element={<RutaProtegida><MisCasas /></RutaProtegida>} />
 
         <Route path="/contacto" element={<RutaProtegida><Contacto /></RutaProtegida>} />
+
+        {/* Admin routes */}
+        <Route path="/admin" element={<RutaProtegida adminOnly><AdminLayout><AdminDashboard /></AdminLayout></RutaProtegida>} />
+        <Route path="/admin/propiedades" element={<RutaProtegida adminOnly><AdminLayout><AdminProperties /></AdminLayout></RutaProtegida>} />
+        <Route path="/admin/usuarios" element={<RutaProtegida adminOnly><AdminLayout><AdminUsers /></AdminLayout></RutaProtegida>} />
+        <Route path="/admin/usuarios/:id" element={<RutaProtegida adminOnly><AdminUserDetail /></RutaProtegida>} />
       </Routes>
     </BrowserRouter>
   );
