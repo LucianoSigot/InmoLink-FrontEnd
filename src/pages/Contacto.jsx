@@ -82,7 +82,7 @@ const Contacto = () => {
 
                 <div className="w-36 h-36 mb-6 relative transition-transform duration-300 group-hover:scale-110">
                   <img
-                    src="https://cdn-icons-png.flaticon.com/512/4406/4406187.png"
+                    src="https://cdn-icons-png.flaticon.com/512/160/160200.png"
                     alt="WhatsApp 3D"
                     className="w-full h-full object-contain drop-shadow-[0_15px_15px_rgba(34,197,94,0.3)]"
                   />

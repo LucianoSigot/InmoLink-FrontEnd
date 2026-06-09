@@ -18,3 +18,35 @@
 .gold-gradient {
   background: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%);
 }
+
+@layer utilities {
+  .animate-fadeSlide {
+    animation-name: fadeSlide;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+  }
+}
+
+@keyframes fadeSlide {
+  0% {
+    opacity: 0;
+    transform: scale(1.02) translateX(-16px);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(1.04) translateX(0);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.06) translateX(10px);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(1.08) translateX(20px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.08) translateX(20px);
+  }
+}

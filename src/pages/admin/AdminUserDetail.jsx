@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BadgeEstado from "../../componentesAdmin/BadgeEstado";
 import ModalConfirmacion from "../../componentesAdmin/ModalConfirmacion";
-import ModalEditarPropiedad from "../../componentesAdmin/ModalEditarPropiedad";
 import AdminLayout from "../../componentesAdmin/AdminLayout";
 
 export default function AdminUserDetail() {

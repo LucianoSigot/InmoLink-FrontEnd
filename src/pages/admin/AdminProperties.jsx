@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import BadgeEstado from "../../componentesAdmin/BadgeEstado";
 import ModalConfirmacion from "../../componentesAdmin/ModalConfirmacion";
-import ModalEditarPropiedad from "../../componentesAdmin/ModalEditarPropiedad";
 
 export default function AdminProperties() {
   const [propiedades, setPropiedades] = useState([]);
@@ -66,7 +65,7 @@ export default function AdminProperties() {
     cargar(pagina);
   };
 
-  const guardarPropiedad = async (id, data) => {
+  /*const guardarPropiedad = async (id, data) => {
     await fetch(`http://localhost:4000/api/admin/properties/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -75,7 +74,7 @@ export default function AdminProperties() {
     });
     setModal(null);
     cargar(pagina);
-  };
+  };*/
 
   return (
     <div className="space-y-6">
@@ -176,12 +175,7 @@ export default function AdminProperties() {
                     <td className="px-6 py-4"><BadgeEstado estado={p.estado} /></td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => setModal({ tipo: "editar", propiedad: p })}
-                          className="px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-                        >
-                          Editar
-                        </button>
+                        
                         {p.estado === "pendiente" && (
                           <>
                             <button

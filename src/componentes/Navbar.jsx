@@ -7,17 +7,17 @@ function Navbar({ children, styles, showBackButton }) {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [fotoPerfil, setFotoPerfil] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [userRol, setUserRol] = useState(null);
 
   useEffect(() => {
     const cargarDatosUsuario = async () => {
       try {
         const data = await getUserProfile();
-        if (data && data.foto) {
-          setFotoPerfil(data.foto);
-        }
-        if (data && data.rol) {
-          setUserRol(data.rol);
+        if (data) {
+          setFotoPerfil(data.foto || null);
+          setUserName(data.name || data.nombre || null);
+          setUserRol(data.rol || null);
         }
       } catch (error) {
         console.error("Error al cargar la foto de perfil en el Navbar", error);
@@ -40,7 +40,8 @@ function Navbar({ children, styles, showBackButton }) {
     document.body.style.overflow = 'unset';
   };
 
-  const imagenAvatar = fotoPerfil || "https://via.placeholder.com/150";
+  const avatarInitial = userName ? userName.charAt(0).toUpperCase() : 'U';
+  const hasAvatarImage = Boolean(fotoPerfil);
 
   return (
     <>
@@ -86,7 +87,11 @@ function Navbar({ children, styles, showBackButton }) {
             </Link>
             
             <Link to="/perfil" className="flex items-center space-x-3 p-1 pr-3 rounded-full hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
-              <img className="h-8 w-8 rounded-full object-cover border border-gray-200" src={imagenAvatar} alt="Avatar" />
+              {hasAvatarImage ? (
+                <img className="h-8 w-8 rounded-full object-cover border border-gray-200" src={fotoPerfil} alt={`${userName ?? 'Usuario'} avatar`} />
+              ) : (
+                <div className="h-8 w-8 rounded-full flex items-center justify-center bg-gray-200 text-sm font-bold text-gray-600 border border-gray-200">{avatarInitial}</div>
+              )}
               <span className="text-sm font-semibold text-gray-800">Mi Perfil</span>
             </Link>
           </div>
@@ -138,7 +143,13 @@ function Navbar({ children, styles, showBackButton }) {
 
             <div className="pt-10">
               <Link to="/perfil" onClick={closeMenu} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-3xl border border-gray-100">
-                <img className="h-14 w-14 rounded-full object-cover border-2 border-white shadow-sm" src={imagenAvatar} alt="Avatar" />
+                {hasAvatarImage ? (
+                  <img className="h-14 w-14 rounded-full object-cover border-2 border-white shadow-sm" src={fotoPerfil} alt={`${userName ?? 'Usuario'} avatar`} />
+                ) : (
+                  <div className="h-14 w-14 rounded-full flex items-center justify-center bg-gray-200 text-2xl font-bold text-gray-600 border-2 border-white shadow-sm">
+                    {avatarInitial}
+                  </div>
+                )}
                 <div>
                   <span className="block text-sm font-bold text-gray-900">Mi Perfil</span>
                   <span className="text-xs text-gray-400 uppercase tracking-widest">Ver mi actividad</span>

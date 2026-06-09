@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BadgeEstado from "../../componentesAdmin/BadgeEstado";
 import ModalConfirmacion from "../../componentesAdmin/ModalConfirmacion";
-import ModalEditarUsuario from "../../componentesAdmin/ModalEditarUsuario";
 
 export default function AdminUsers() {
   const navigate = useNavigate();
@@ -62,7 +61,7 @@ export default function AdminUsers() {
     cargar(pagina);
   };
 
-  const guardarUsuario = async (id, data) => {
+  /*const guardarUsuario = async (id, data) => {
     await fetch(`http://localhost:4000/api/admin/users/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -71,7 +70,7 @@ export default function AdminUsers() {
     });
     setModal(null);
     cargar(pagina);
-  };
+  };*/
 
   return (
     <div className="space-y-6">
@@ -159,12 +158,7 @@ export default function AdminUsers() {
                           className="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
                         >
                           Ver
-                        </button>
-                        <button
-                          onClick={() => setModal({ tipo: "editar", usuario: u })}
-                          className="px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-                        >
-                          Editar
+
                         </button>
                         {u.rol === "usuario" ? (
                           <button
