@@ -1,40 +1,75 @@
 import React, { useState } from 'react';
 
-const CalendarioReserva = ({ startDate, endDate, onDateChange, occupiedDates = [] }) => {
+const CalendarioReserva = ({ startDate, endDate, onDateChange, occupiedDates = [], onRangeError }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
 
+  const toLocalDateString = (date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
+
+  const parseLocalDate = (dateStr) => {
+    const clean = dateStr.split('T')[0];
+    const [y, m, d] = clean.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  };
+
   const isDateOccupied = (date) => {
     return occupiedDates.some(range => {
-      const start = new Date(range.fechaInicio);
-      const end = new Date(range.fechaFin);
+      const start = parseLocalDate(range.fechaInicio);
+      const end = parseLocalDate(range.fechaFin);
       return date >= start && date <= end;
     });
+  };
+
+  const isPastDate = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
+
+  const hasOccupiedInRange = (startStr, endStr) => {
+    const rangeStart = parseLocalDate(startStr);
+    const rangeEnd = parseLocalDate(endStr);
+    const current = new Date(rangeStart);
+    while (current <= rangeEnd) {
+      if (isDateOccupied(current)) return true;
+      current.setDate(current.getDate() + 1);
+    }
+    return false;
   };
 
   const isSelected = (date) => {
     if (!startDate) return false;
     const current = new Date(date).setHours(0,0,0,0);
-    const start = new Date(startDate).setHours(0,0,0,0);
+    const start = parseLocalDate(startDate).setHours(0,0,0,0);
     if (!endDate) return current === start;
-    const end = new Date(endDate).setHours(0,0,0,0);
+    const end = parseLocalDate(endDate).setHours(0,0,0,0);
     return current >= start && current <= end;
   };
 
   const handleDateClick = (day) => {
     const clickedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-    if (isDateOccupied(clickedDate)) return;
+    if (isDateOccupied(clickedDate) || isPastDate(clickedDate)) return;
 
     if (!startDate || (startDate && endDate)) {
-      onDateChange(clickedDate.toISOString().split('T')[0], null);
+      onDateChange(toLocalDateString(clickedDate), null);
     } else {
       const start = new Date(startDate);
       if (clickedDate < start) {
-        onDateChange(clickedDate.toISOString().split('T')[0], null);
+        onDateChange(toLocalDateString(clickedDate), null);
       } else {
-        onDateChange(startDate, clickedDate.toISOString().split('T')[0]);
+        const endStr = toLocalDateString(clickedDate);
+        if (hasOccupiedInRange(startDate, endStr)) {
+          onRangeError && onRangeError();
+          return;
+        }
+        onDateChange(startDate, endStr);
       }
     }
   };
@@ -76,6 +111,8 @@ const CalendarioReserva = ({ startDate, endDate, onDateChange, occupiedDates = [
           const day = i + 1;
           const date = new Date(year, month, day);
           const occupied = isDateOccupied(date);
+          const past = isPastDate(date);
+          const disabled = occupied || past;
           const selected = isSelected(date);
           const isToday = new Date().setHours(0,0,0,0) === date.setHours(0,0,0,0);
 
@@ -83,16 +120,18 @@ const CalendarioReserva = ({ startDate, endDate, onDateChange, occupiedDates = [
             <button
               key={day}
               onClick={() => handleDateClick(day)}
-              disabled={occupied}
+              disabled={disabled}
               className={`
                 relative h-10 w-full flex items-center justify-center rounded-xl text-xs font-bold transition-all
-                ${occupied ? 'text-red-300 bg-red-50/30 cursor-not-allowed line-through' : 'hover:bg-gray-50 text-gray-700'}
+                ${occupied ? 'text-gray-400 bg-gray-100 cursor-not-allowed line-through' : ''}
+                ${past && !occupied ? 'text-gray-300 bg-gray-50/50 cursor-not-allowed' : ''}
+                ${!disabled ? 'hover:bg-gray-50 text-gray-700' : ''}
                 ${selected ? '!bg-black !text-white shadow-lg scale-105 z-10' : ''}
                 ${isToday && !selected ? 'border border-amber-200 text-amber-600' : ''}
               `}
             >
               {day}
-              {occupied && <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-400 rounded-full"></div>}
+              {occupied && <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-gray-400 rounded-full"></div>}
             </button>
           );
         })}
@@ -100,7 +139,7 @@ const CalendarioReserva = ({ startDate, endDate, onDateChange, occupiedDates = [
       
       <div className="mt-6 flex gap-4 text-[9px] font-bold uppercase tracking-widest justify-center border-t border-gray-50 pt-4">
         <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
           <span className="text-gray-400">Ocupado</span>
         </div>
         <div className="flex items-center gap-1.5">

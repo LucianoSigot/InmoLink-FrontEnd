@@ -22,6 +22,7 @@ export default function Alquilo() {
   const [reserving, setReserving] = useState(false);
   const [status, setStatus] = useState({ type: '', text: '' });
   const [showPayment, setShowPayment] = useState(false);
+  const [rangeError, setRangeError] = useState('');
 
   useEffect(() => {
     async function load() {
@@ -78,6 +79,12 @@ export default function Alquilo() {
     setStartDate(start);
     setEndDate(end);
     setStatus({ type: '', text: '' });
+    setRangeError('');
+  };
+
+  const onRangeError = () => {
+    setRangeError('El rango seleccionado contiene fechas ocupadas');
+    setTimeout(() => setRangeError(''), 4000);
   };
 
   const handleBookingStart = () => {
@@ -165,6 +172,69 @@ export default function Alquilo() {
               <p className="text-gray-500 leading-relaxed italic text-lg">{item.descripcion}</p>
             </div>
 
+            {item.servicios && (() => {
+              const servicioLabels = {
+                wifi: { label: 'Wi-Fi', icon: '📶' },
+                agua_caliente: { label: 'Agua caliente', icon: '🚿' },
+                aire_acondicionado: { label: 'Aire acondicionado', icon: '❄️' },
+                calefaccion: { label: 'Calefacción', icon: '🔥' },
+                articulos_higiene: { label: 'Artículos de higiene', icon: '🧴' },
+                cocina: { label: 'Cocina', icon: '🍳' },
+                microondas: { label: 'Microondas', icon: '📦' },
+                heladera: { label: 'Heladera', icon: '🧊' },
+                horno: { label: 'Horno', icon: '🫕' },
+                cafetera: { label: 'Cafetera', icon: '☕' },
+                utensilios_basicos: { label: 'Utensilios básicos', icon: '🍴' },
+                botiquin: { label: 'Botiquín', icon: '🩹' },
+                detector_humo: { label: 'Detector de humo', icon: '💨' },
+                detector_monoxido: { label: 'Detector de monóxido', icon: '⚠️' },
+                extintor: { label: 'Extintor', icon: '🧯' },
+                caja_fuerte: { label: 'Caja fuerte', icon: '🔐' },
+                estacionamiento_gratis: { label: 'Estacionamiento gratis', icon: '🅿️' },
+                estacionamiento_paga: { label: 'Estacionamiento de pago', icon: '💳' },
+                estacionamiento_cubierto: { label: 'Estacionamiento cubierto', icon: '🏗️' },
+                televisor: { label: 'Televisor', icon: '📺' },
+                streaming: { label: 'Streaming', icon: '🎬' },
+                parlantes: { label: 'Parlantes', icon: '🔊' },
+                juegos_mesa: { label: 'Juegos de mesa', icon: '🎲' },
+                rampa_acceso: { label: 'Rampa de acceso', icon: '♿' },
+                ascensor: { label: 'Ascensor', icon: '🛗' },
+                pasillos_anchos: { label: 'Pasillos anchos', icon: '🚪' },
+                banio_adaptado: { label: 'Baño adaptado', icon: '🚿' }
+              };
+
+              const categorias = [
+                { key: 'basicos', title: 'Servicios Básicos', servicios: item.servicios.basicos },
+                { key: 'cocina', title: 'Cocina', servicios: item.servicios.cocina },
+                { key: 'seguridad', title: 'Seguridad', servicios: item.servicios.seguridad },
+                { key: 'estacionamiento', title: 'Estacionamiento', servicios: item.servicios.estacionamiento },
+                { key: 'entretenimiento', title: 'Entretenimiento', servicios: item.servicios.entretenimiento },
+                { key: 'accesibilidad', title: 'Accesibilidad', servicios: item.servicios.accesibilidad }
+              ];
+
+              const serviciosActivos = categorias.flatMap(cat =>
+                Object.entries(cat.servicios || {})
+                  .filter(([, val]) => val === true)
+                  .map(([key]) => ({ ...servicioLabels[key], key, categoria: cat.title }))
+              );
+
+              if (serviciosActivos.length === 0) return null;
+
+              return (
+                <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-50">
+                  <h3 className="text-2xl font-['Cormorant_Garamond'] font-bold text-gray-900 mb-8 uppercase tracking-widest text-sm">Servicios Incluidos</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {serviciosActivos.map(servicio => (
+                      <div key={servicio.key} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <span className="text-xl">{servicio.icon}</span>
+                        <span className="text-gray-700 text-sm font-medium">{servicio.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+
             <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-50">
               <h3 className="text-2xl font-['Cormorant_Garamond'] font-bold text-gray-900 mb-8 uppercase tracking-widest text-sm">Disponibilidad</h3>
               <CalendarioReserva 
@@ -172,6 +242,7 @@ export default function Alquilo() {
                 endDate={endDate} 
                 onDateChange={onDateChange} 
                 occupiedDates={occupiedDates}
+                onRangeError={onRangeError}
               />
             </div>
 
@@ -194,13 +265,25 @@ export default function Alquilo() {
                 </div>
               )}
 
-              <button
-                onClick={handleBookingStart}
-                disabled={reserving || !startDate || !endDate}
-                className="w-full bg-black text-white font-bold text-[10px] uppercase tracking-[0.2em] py-5 rounded-full hover:bg-gray-800 transition-all disabled:opacity-30"
-              >
-                {reserving ? 'Procesando...' : 'Confirmar Reserva'}
-              </button>
+              {rangeError && (
+                <div className="mb-6 p-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-center bg-red-50 text-red-700">
+                  {rangeError}
+                </div>
+              )}
+
+              {user && String(item?.propietarioId) === String(user.id) ? (
+                <div className="w-full bg-gray-100 text-gray-500 font-bold text-[10px] uppercase tracking-[0.2em] py-5 rounded-full text-center">
+                  Esta es tu propiedad
+                </div>
+              ) : (
+                <button
+                  onClick={handleBookingStart}
+                  disabled={reserving || !startDate || !endDate}
+                  className="w-full bg-black text-white font-bold text-[10px] uppercase tracking-[0.2em] py-5 rounded-full hover:bg-gray-800 transition-all disabled:opacity-30"
+                >
+                  {reserving ? 'Procesando...' : 'Confirmar Reserva'}
+                </button>
+              )}
 
               <div className="mt-8 pt-8 border-t border-gray-50 space-y-4 text-[10px] font-bold uppercase tracking-widest">
                 {nights > 0 ? (
