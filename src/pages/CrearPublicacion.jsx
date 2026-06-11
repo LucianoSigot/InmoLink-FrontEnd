@@ -13,7 +13,7 @@ const CrearPublicacion = () => {
     setError('');
 
     try {
-      const response = await fetch("http://localhost:4000/properties", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}properties`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

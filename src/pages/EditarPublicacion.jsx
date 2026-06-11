@@ -62,7 +62,7 @@ export default function EditarPublicacion() {
       const body = new FormData();
       body.append('image', file);
 
-      const res = await fetch('http://localhost:4000/api/upload-property-image', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}api/upload-property-image`, {
         method: 'POST',
         credentials: 'include',
         body

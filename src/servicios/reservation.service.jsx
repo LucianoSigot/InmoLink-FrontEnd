@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:4000/reservation';
+const API_URL = `${import.meta.env.VITE_API_URL}reservation`;
 
 export const getReservationsByProperty = async (propertyId) => {
     try {

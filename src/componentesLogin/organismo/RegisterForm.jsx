@@ -23,7 +23,8 @@ function RegisterForm() {
         setLoading(true);
         setError('');
         try {
-            const response = await fetch("http://localhost:4000/api/register", {
+            const API_URL = import.meta.env.VITE_API_URL;
+            const response = await fetch(`${API_URL}api/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +54,7 @@ function RegisterForm() {
 
     const handleGoogleRegister = () => {
         setLoading(true);
-        window.location.href = "http://localhost:4000/auth/google";
+        window.location.href = `${import.meta.env.VITE_API_URL}auth/google`;
     };
 
     return (

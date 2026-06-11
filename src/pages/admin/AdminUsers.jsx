@@ -27,7 +27,8 @@ export default function AdminUsers() {
     params.set("limite", 20);
 
     try {
-      const res = await fetch(`http://localhost:4000/api/admin/users?${params}`, { credentials: "include" });
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${API_URL}api/admin/users?${params}`, { credentials: "include" });
       const data = await res.json();
       setUsuarios(data.usuarios || []);
       setTotal(data.total || 0);
@@ -42,7 +43,7 @@ export default function AdminUsers() {
   useEffect(() => { cargar(1); }, [busqueda, rol, ordenar]);
 
   const cambiarRol = async (id, nuevoRol) => {
-    await fetch(`http://localhost:4000/api/admin/users/${id}/role`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/users/${id}/role`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -53,7 +54,7 @@ export default function AdminUsers() {
   };
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:4000/api/admin/users/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/users/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -62,7 +63,7 @@ export default function AdminUsers() {
   };
 
   /*const guardarUsuario = async (id, data) => {
-    await fetch(`http://localhost:4000/api/admin/users/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/users/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

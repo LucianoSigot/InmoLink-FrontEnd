@@ -1,5 +1,7 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const verPropiedades = async () => {
-    const response = await fetch(`http://localhost:4000/properties/mine`, {
+    const response = await fetch(`${API_URL}properties/mine`, {
         method: "GET",
         credentials: "include",
     });
@@ -12,7 +14,7 @@ export const verPropiedades = async () => {
 }
 
 export const obtenerPropiedad = async (id) => {
-    const response = await fetch(`http://localhost:4000/properties/${id}`, {
+    const response = await fetch(`${API_URL}properties/${id}`, {
         method: "GET",
         credentials: "include",
     });
@@ -25,7 +27,7 @@ export const obtenerPropiedad = async (id) => {
 }
 
 export const editarPropiedades = async (id, credenciales) => {
-    const response = await fetch(`http://localhost:4000/properties/${id}`, {
+    const response = await fetch(`${API_URL}properties/${id}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(credenciales),

@@ -7,7 +7,7 @@ export default function DiagnosticPage() {
 
   useEffect(() => {
     // Verificar conexión con backend
-    fetch('http://localhost:4000/api/checkOut', {
+    fetch(`${import.meta.env.VITE_API_URL}api/checkOut`, {
       credentials: 'include'
     })
       .then(res => {
@@ -50,8 +50,8 @@ export default function DiagnosticPage() {
       <div className="p-4 bg-blue-100 rounded">
         <h2 className="font-bold">Puertos esperados:</h2>
         <ul>
-          <li>Frontend: http://localhost:5173 o 5174</li>
-          <li>Backend: http://localhost:4000</li>
+          <li>Frontend: {import.meta.env.VITE_API_URL ? 'Producción (Netlify)' : 'http://localhost:5173 o 5174'}</li>
+          <li>Backend: {import.meta.env.VITE_API_URL || 'http://localhost:4000'}</li>
         </ul>
       </div>
     </div>

@@ -17,7 +17,7 @@ export default function EditarUsuario() {
   useEffect(() => {
     async function loadUser() {
       try {
-        const res = await fetch('http://localhost:4000/api/perfil', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}api/perfil`, {
           method: 'GET',
           credentials: 'include'
         });
@@ -54,7 +54,7 @@ export default function EditarUsuario() {
       const formData = new FormData();
       formData.append('image', file);
 
-      const res = await fetch('http://localhost:4000/api/upload-profile-image', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}api/upload-profile-image`, {
         method: 'POST',
         credentials: 'include',
         body: formData
@@ -78,7 +78,7 @@ export default function EditarUsuario() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await fetch('http://localhost:4000/api/perfil', {
+      await fetch(`${import.meta.env.VITE_API_URL}api/perfil`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

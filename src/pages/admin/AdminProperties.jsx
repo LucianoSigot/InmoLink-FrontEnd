@@ -31,7 +31,8 @@ export default function AdminProperties() {
     params.set("limite", 15);
 
     try {
-      const res = await fetch(`http://localhost:4000/api/admin/properties?${params}`, { credentials: "include" });
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${API_URL}api/admin/properties?${params}`, { credentials: "include" });
       const data = await res.json();
       setPropiedades(data.propiedades || []);
       setTotal(data.total || 0);
@@ -46,7 +47,7 @@ export default function AdminProperties() {
   useEffect(() => { cargar(1); }, [busqueda, estado, ordenar, precioMin, precioMax]);
 
   const cambiarEstado = async (id, nuevoEstado) => {
-    await fetch(`http://localhost:4000/api/admin/properties/${id}/status`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/properties/${id}/status`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -57,7 +58,7 @@ export default function AdminProperties() {
   };
 
   const eliminar = async (id) => {
-    await fetch(`http://localhost:4000/api/admin/properties/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/properties/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -66,7 +67,7 @@ export default function AdminProperties() {
   };
 
   /*const guardarPropiedad = async (id, data) => {
-    await fetch(`http://localhost:4000/api/admin/properties/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/properties/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

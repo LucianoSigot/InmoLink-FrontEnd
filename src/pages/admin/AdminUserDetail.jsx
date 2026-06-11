@@ -14,7 +14,8 @@ export default function AdminUserDetail() {
 
   const cargar = async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/admin/users/${id}`, { credentials: "include" });
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${API_URL}api/admin/users/${id}`, { credentials: "include" });
       const json = await res.json();
       setData(json);
     } catch (err) {
@@ -26,7 +27,7 @@ export default function AdminUserDetail() {
   useEffect(() => { cargar(); }, [id]);
 
   const cambiarEstadoPropiedad = async (propId, nuevoEstado) => {
-    await fetch(`http://localhost:4000/api/admin/properties/${propId}/status`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/properties/${propId}/status`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -37,7 +38,7 @@ export default function AdminUserDetail() {
   };
 
   const eliminarPropiedad = async (propId) => {
-    await fetch(`http://localhost:4000/api/admin/properties/${propId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/properties/${propId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -46,7 +47,7 @@ export default function AdminUserDetail() {
   };
 
   const guardarPropiedad = async (propId, formData) => {
-    await fetch(`http://localhost:4000/api/admin/properties/${propId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/admin/properties/${propId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -57,7 +58,7 @@ export default function AdminUserDetail() {
   };
 
   const actualizarReserva = async (reservaId, nuevoEstado) => {
-    await fetch(`http://localhost:4000/api/reservation/${reservaId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}api/reservation/${reservaId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

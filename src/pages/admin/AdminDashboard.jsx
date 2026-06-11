@@ -6,9 +6,10 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL;
     Promise.all([
-      fetch("http://localhost:4000/api/admin/properties?limite=1000", { credentials: "include" }).then((r) => r.json()),
-      fetch("http://localhost:4000/api/admin/users?limite=1000", { credentials: "include" }).then((r) => r.json()),
+      fetch(`${API_URL}api/admin/properties?limite=1000`, { credentials: "include" }).then((r) => r.json()),
+      fetch(`${API_URL}api/admin/users?limite=1000`, { credentials: "include" }).then((r) => r.json()),
     ])
       .then(([props, users]) => {
         const pendientes = props.propiedades.filter((p) => p.estado === "pendiente");

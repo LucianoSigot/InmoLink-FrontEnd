@@ -6,7 +6,7 @@ export default function YaLogeado({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/checkOut", {
+    fetch(`${import.meta.env.VITE_API_URL}api/checkOut`, {
       credentials: "include"
     })
       .then(res => {

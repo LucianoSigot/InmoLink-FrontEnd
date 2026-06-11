@@ -23,7 +23,8 @@ function LoginForm() {
         setError('');
 
         try {
-            const response = await fetch("http://localhost:4000/api/login", {
+            const API_URL = import.meta.env.VITE_API_URL;
+            const response = await fetch(`${API_URL}api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ function LoginForm() {
     };
     const handleGoogleLogin = () => {
         setLoading(true);
-        window.location.href = "http://localhost:4000/auth/google";
+        window.location.href = `${import.meta.env.VITE_API_URL}auth/google`;
     };
     return (
         <div className="space-y-8">

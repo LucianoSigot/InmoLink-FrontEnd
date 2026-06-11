@@ -1,7 +1,8 @@
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const deleteCuenta = async (password) =>{
     try{
-        const respuesta = await fetch("http://localhost:4000/api/perfil",{
+        const respuesta = await fetch(`${API_URL}api/perfil`,{
         method: "DELETE",
         headers:{
             'Content-Type': 'application/json',
@@ -20,7 +21,7 @@ export const deleteCuenta = async (password) =>{
 export const logoutCuenta = async ()=>{
 
     try{
-        const respuesta = await fetch("http://localhost:4000/api/logout",{
+        const respuesta = await fetch(`${API_URL}api/logout`,{
         method: "POST",
         credentials: 'include'
     });
@@ -32,7 +33,7 @@ export const logoutCuenta = async ()=>{
 }
 
 export const getUserProfile = async () => {
-    const res = await fetch("http://localhost:4000/api/perfil", {
+    const res = await fetch(`${API_URL}api/perfil`, {
         method: 'GET',
         credentials: 'include'
     });
